@@ -1,8 +1,10 @@
-# NYTimes Objective-C Style Guide
+# Cru Objective-C Style Guide
 
-This style guide outlines the coding conventions of the iOS team at The New York Times. We welcome your feedback in [issues](https://github.com/NYTimes/objetive-c-style-guide/issues), [pull requests](https://github.com/NYTimes/objetive-c-style-guide/pulls) and [tweets](https://twitter.com/nytimesmobile). Also, [we're hiring](http://jobs.nytco.com/job/New-York-iOS-Developer-Job-NY/2572221/).
+This style guide outlines the coding conventions of the iOS team at Cru. It is based off of the [NYTimes style guide](https://github.com/NYTimes/objective-c-style-guide).
 
-Thanks to all of [our contributors](https://github.com/NYTimes/objective-c-style-guide/contributors).
+You will notice that not all code in our repositories adhears to this style guide yet. We are in the process of implementing this style guide. All new code should adhear to this style from now on.
+
+Thanks for reading and contributing.
 
 ## Introduction
 
@@ -53,19 +55,19 @@ UIApplication.sharedApplication.delegate;
 
 ## Spacing
 
-* Indent using 4 spaces. Never indent with tabs. Be sure to set this preference in Xcode.
-* Method braces and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line.
+* Indent using tabs.
+* Method braces and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line (except for else/else if where it will close on the same line as the else statement).
 
 **For example:**  
 ```objc
 if (user.isHappy) {
 //Do something
-}
-else {
+} else {
 //Do something else
 }
 ```
 * There should be exactly one blank line between methods to aid in visual clarity and organization. Whitespace within methods should separate functionality, but often there should probably be new methods.
+* If in doubt add a new line. Space tends to add to clarity.
 * `@synthesize` and `@dynamic` should each be declared on new lines in the implementation.
 
 ## Conditionals
@@ -93,14 +95,24 @@ if (!error) return success;
 
 ### Ternary Operator
 
-The Ternary operator, ? , should only be used when it increases clarity or code neatness. A single condition is usually all that should be evaluated. Evaluating multiple conditions is usually more understandable as an if statement, or refactored into instance variables.
+The Ternary operator, ? , should only be used when it increases clarity or code neatness. e.g. assigning a value only if a parameter exists.
+A single condition is usually all that should be evaluated. Evaluating multiple conditions is usually more understandable as an if statement, or refactored into instance variables.
+When assigning the result of a ternary statement please wrap the statement in brackets for clarity.
 
 **For example:**
+
 ```objc
-result = a > b ? x : y;
+result = ( parameterString ? parameterString : @"" );
+```
+
+or
+
+```objc
+result = ( a > b ? x : y );
 ```
 
 **Not:**
+
 ```objc
 result = a > b ? x = c > d ? c : d : y;
 ```
@@ -115,7 +127,7 @@ In method signatures, there should be a space after the scope (-/+ symbol). Ther
 ```
 ## Variables
 
-Variables should be named as descriptively as possible. Single letter variable names should be avoided except in `for()` loops. 
+Variables should be named as descriptively as possible. Single letter variable names should NEVER be used ESPECIALLY in `for()` loops. 
 
 Asterisks indicating pointers belong with the variable, e.g., `NSString *text` not `NSString* text` or `NSString * text`, except in the case of constants.
 
@@ -124,7 +136,7 @@ Property definitions should be used in place of naked instance variables wheneve
 **For example:**  
 
 ```objc
-@interface NYTSection: NSObject
+@interface CRUSection: NSObject
 
 @property (nonatomic) NSString *headline;
 
@@ -134,7 +146,7 @@ Property definitions should be used in place of naked instance variables wheneve
 **Not:**
 
 ```objc
-@interface NYTSection : NSObject {
+@interface CRUSection : NSObject {
     NSString *headline;
 }
 ```
@@ -157,12 +169,12 @@ UIButton *settingsButton;
 UIButton *setBut;
 ```
 
-A three letter prefix (e.g. `NYT`) should always be used for class names and constants, however may be omitted for Core Data entity names. Constants should be camel-case with all words capitalized and prefixed by the related class name for clarity. 
+A three letter prefix (e.g. `CRU`) should always be used for class names and constants and Core Data entity names. Constants should be camel-case with all words capitalized and prefixed by the related class name for clarity. 
 
 **For example:**  
 
 ```objc
-static const NSTimeInterval NYTArticleViewControllerNavigationFadeAnimationDuration = 0.3;
+static const NSTimeInterval CRUArticleViewControllerNavigationFadeAnimationDuration = 0.3;
 ```
 
 **Not:**
@@ -203,22 +215,33 @@ Block comments should generally be avoided, as code should be as self-documentin
 
 `NSString`, `NSDictionary`, `NSArray`, and `NSNumber` literals should be used whenever creating immutable instances of those objects. Pay special care that `nil` values not be passed into `NSArray` and `NSDictionary` literals, as this will cause a crash.
 
+For more info on literals (i.e. what they are if you're new) see:
+[An introductory blog post](http://blog.bignerdranch.com/398-objective-c-literals-part-1/)
+[The Official Documentation](http://clang.llvm.org/docs/ObjectiveCLiterals.html)
+
+
 **For example:**  
 
 ```objc
 NSArray *names = @[@"Brian", @"Matt", @"Chris", @"Alex", @"Steve", @"Paul"];
-NSDictionary *productManagers = @{@"iPhone" : @"Kate", @"iPad" : @"Kamal", @"Mobile Web" : @"Bill"};
+NSDictionary *productManagers = @{@"iPhone" : @"Harro", @"iPad" : @"Harro", @"Mobile Web" : @"Josh"};
 NSNumber *shouldUseLiterals = @YES;
 NSNumber *buildingZIPCode = @10018;
+NSMutableDictionary *managers = [productionManagers mutableCopy];
+NSString *iPadManager = managers[@"iPad"];
+managers[@"Android"] = @"Harro";
 ```
 
 **Not:**  
 
 ```objc
 NSArray *names = [NSArray arrayWithObjects:@"Brian", @"Matt", @"Chris", @"Alex", @"Steve", @"Paul", nil];
-NSDictionary *productManagers = [NSDictionary dictionaryWithObjectsAndKeys: @"Kate", @"iPhone", @"Kamal", @"iPad", @"Bill", @"Mobile Web", nil];
+NSDictionary *productManagers = [NSDictionary dictionaryWithObjectsAndKeys: @"Harro", @"iPhone", @"Harro", @"iPad", @"Josh", @"Mobile Web", nil];
 NSNumber *shouldUseLiterals = [NSNumber numberWithBool:YES];
 NSNumber *ZIPCode = [NSNumber numberWithInteger:10018];
+NSMutableDictionary *managers = [productionManagers mutableCopy]; //this is allowed, its just here for the example
+NSString *iPadManager = [managers valueForKey:@"iPad"];
+[managers setValue:@"Harro" forKey:@"Android"];
 ```
 
 ## CGRect Functions
@@ -256,15 +279,15 @@ Constants are preferred over in-line string literals or numbers, as they allow f
 **For example:**  
 
 ```objc
-static NSString * const NYTAboutViewControllerCompanyName = @"The New York Times Company";  
+static NSString * const CRUAboutViewControllerCompanyName = @"Cru Global";  
 
-static const CGFloat NYTImageThumbnailHeight = 50.0;
+static const CGFloat CRUImageThumbnailHeight = 50.0;
 ```
 
 **Not:**  
 
 ```objc
-#define CompanyName @"The New York Times Company"
+#define CompanyName @"Cru Global"
 
 #define thumbnailHeight 2
 ```
@@ -276,24 +299,22 @@ When using `enum`s, it is recommended to use the new fixed underlying type speci
 **Example:**  
 
 ```objc
-typedef NS_ENUM(NSInteger, NYTAdRequestState) {
-    NYTAdRequestStateInactive,
-    NYTAdRequestStateLoading
+typedef NS_ENUM(NSInteger, CRUAdRequestState) {
+    CRUAdRequestStateInactive,
+    CRUAdRequestStateLoading
 };
 ```
 
 ## Private Properties
 
-Private properties should be declared in class extensions (anonymous categories) in the implementation file of a class. Named categories (such as `NYTPrivate` or `private`) should never be used unless extending another class.
+Private properties should be declared in class extensions (anonymous categories) in the implementation file of a class. Named categories (such as `CRUPrivate` or `private`) should never be used unless extending another class.
 
 **For example:**  
 
 ```objc
-@interface NYTAdvertisement ()
+@interface CRUSurvey ()
 
-@property (nonatomic, strong) GADBannerView *googleAdView;
-@property (nonatomic, strong) ADBannerView *iAdView;
-@property (nonatomic, strong) UIWebView *adXWebView;
+@property (nonatomic, strong) UIWebView *surveyWebView;
 
 @end
 ```
