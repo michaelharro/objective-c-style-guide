@@ -2,7 +2,7 @@
 
 This style guide outlines the coding conventions of the iOS team at Cru. It is based off of the [NYTimes style guide](https://github.com/NYTimes/objective-c-style-guide).
 
-You will notice that not all code in our repositories adhears to this style guide yet. We are in the process of implementing this style guide. All new code should adhear to this style from now on.
+You will notice that not all code in our repositories adheres to this style guide yet. We are in the process of implementing this style guide. All new code should adhere to this style from now on.
 
 Thanks for reading and contributing.
 
